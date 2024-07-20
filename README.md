@@ -29,6 +29,22 @@
    iptables -N SSH-INPUT
    iptables -N SSH-INPUTTWO
    ```
+   - Добавление правил для основной цепочки TRAFFIC:
+   ```shell
+   iptables -A INPUT -i enp0s8 -j TRAFFIC
+   iptables -A TRAFFIC -i enp0s8 -m state --state ESTABLISHED,RELATED -j ACCEPT
+   iptables -A TRAFFIC -i enp0s8 -m state --state NEW -m tcp -p tcp --dport 22 -m recent --rcheck --seconds 30 --name SSH2 -j ACCEPT
+   ```
+   В последнем, из приведённых выше правил, происходит открытие 22-го порта на 30 секунд, при условии, что подключающийся ip находится в списке SSH2. Если в соответствии с данным правилом трафик не принимается (например, не было попыток подключения в течение 30 секунд), но подключающийся IP-адрес находится в списке SSH2, он удаляется из этого списка для осуществления проверки с самого начала:
+   ```shell
+   iptables -A TRAFFIC -i enp0s8 -m state --state NEW -m tcp -p tcp -m recent --name SSH2 --remove -j DROP
+   ```
+   После того, как конец последовательности был обработан первым, следующие правила выполняют проверку следования портов. Если проверка пройдена, то происходит переход к цепочке, в которой ip-адрес добавляется в список для следующего запроса. Если перехода на цепочки SSH-INPUT или SSH-INPUTTWO не произошло, то это может свидетельствовать о неверных портах в последовательности или о наличии неустановленного трафика. После чего, по аналогии с предыдущим правилом для списка SSH2, осуществляется удаление ip-адреса из списка SSH1 и отбрасывание трафика:
+   ```shell
+   iptables -A TRAFFIC -i enp0s8 -m state --state NEW -m tcp -p tcp --dport 9991 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
+iptables -A TRAFFIC -i enp0s8 -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
+   ```
+   
    
     
 
