@@ -70,6 +70,7 @@
    ```shell
    vagrant@centralRouter:~$ ssh vagrant@192.168.255.1
    ^C
+   
    vagrant@centralRouter:~$ ./knock 192.168.255.1 8881 7777 9991
    Starting Nmap 7.80 ( https://nmap.org ) at 2024-07-20 13:04 UTC
    Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
@@ -111,6 +112,8 @@
    Last login: Sat Jul 20 12:28:39 2024 from 192.168.56.1
    vagrant@inetRouter:~$
    ```
+   2. Проброс порта.
+      - После установки NGINX, работающего на порту 80, на centralServer (192.168.0.2), необходимо пробросить порт 8080 на inetRouter2 (192.168.255.14) 
    
    
    
