@@ -42,7 +42,7 @@
    После того, как конец последовательности был обработан первым, следующие правила выполняют проверку следования портов. Если проверка пройдена, то происходит переход к цепочке, в которой ip-адрес добавляется в список для следующего запроса. Если перехода на цепочки SSH-INPUT или SSH-INPUTTWO не произошло, то это может свидетельствовать о неверных портах в последовательности или о наличии неустановленного трафика. После чего, по аналогии с предыдущим правилом для списка SSH2, осуществляется удаление ip-адреса из списка SSH1 и отбрасывание трафика:
    ```shell
    iptables -A TRAFFIC -i enp0s8 -m state --state NEW -m tcp -p tcp --dport 9991 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
-iptables -A TRAFFIC -i enp0s8 -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
+   iptables -A TRAFFIC -i enp0s8 -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
    ```
    
    
