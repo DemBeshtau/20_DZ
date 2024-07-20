@@ -44,6 +44,12 @@
    iptables -A TRAFFIC -i enp0s8 -m state --state NEW -m tcp -p tcp --dport 9991 -m recent --rcheck --name SSH1 -j SSH-INPUTTWO
    iptables -A TRAFFIC -i enp0s8 -m state --state NEW -m tcp -p tcp -m recent --name SSH1 --remove -j DROP
    ```
+   Подобные действия осуществляются для проверки следующего порта. Порядок следования в цепочке TRAFFIC может быть любым при условии, что правила, соответствующие одному и тому же списку, сохраняются вместе и в правильном порядке:
+   ```shell
+   iptables -A TRAFFIC -i eth1 -m state --state NEW -m tcp -p tcp --dport 7777 -m recent --rcheck --name SSH0 -j SSH-INPUT
+iptables -A TRAFFIC -i eth1 -m state --state NEW -m tcp -p tcp -m recent --name SSH0 --remove -j DROP
+   ``` 
+   
    
    
     
