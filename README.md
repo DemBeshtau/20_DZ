@@ -56,7 +56,16 @@
    iptables -A SSH-INPUTTWO -m recent --name SSH2 --set -j DROP
    iptables -A TRAFFIC -i enp0s8 -j DROP
    ```    
-
+   - Настройка port knocking со стороны клиента. Для того, чтобы со стороны клиента постучаться в порты, используется утилита nmap. Данное действие реализуется с помощью bash-скрипта:
+   ```shell
+   #!/bin/bash
+   HOST=$1
+   shift
+   for ARG in "$@"
+   do
+      nmap -Pn --max-retries 0 -p $ARG $HOST
+   done
+   ```
    
    
    
