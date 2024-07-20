@@ -61,9 +61,10 @@
    #!/bin/bash
    HOST=$1
    shift
+
    for ARG in "$@"
    do
-      nmap -Pn --max-retries 0 -p $ARG $HOST
+      nmap -Pn -e enp0s8 --max-retries 0 -p $ARG $HOST
    done
    ```
    - Проверка метода port knocking:
