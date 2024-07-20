@@ -20,7 +20,7 @@
 ![изображение](https://github.com/user-attachments/assets/8841be0a-1533-4fb0-b7a7-2a5626706452)
 
 1. Реализация port knocking.
-   Port knocking - это скрытый метод для внешнего открытия портов, которые по умолчанию файервол держит закрытыми. Для работы данного метода требуется ряд попыток подключения к заранее определённым закрытым портам. Обращение к этим портам должно осуществляться в заданной последовательности. При соблюдении вышеуказанных условий, файервол открывает для подключения необходимый порт.<br/>
+   Port knocking - это скрытый метод для внешнего открытия портов, которые по умолчанию фаервол держит закрытыми. Для работы данного метода требуется ряд попыток подключения к заранее определённым закрытым портам. Обращение к этим портам должно осуществляться в заданной последовательности. При соблюдении вышеуказанных условий, фаервол открывает для подключения необходимый порт.<br/>
    Port knocking метод возможно реализовать с помощью демона knockd либо посредством iptables.<br/>
    Ниже приводится реализация метода port knocking посредством настройки iptables.
    - Создание дополнительных цепочек TRAFFIC, SSH-INPUT, SSH-INPUTTWO:
@@ -65,6 +65,51 @@
    do
       nmap -Pn --max-retries 0 -p $ARG $HOST
    done
+   ```
+   - Проверка метода port knocking:
+   ```shell
+   vagrant@centralRouter:~$ ssh vagrant@192.168.255.1
+   ^C
+   vagrant@centralRouter:~$ ./knock 192.168.255.1 8881 7777 9991
+   Starting Nmap 7.80 ( https://nmap.org ) at 2024-07-20 13:04 UTC
+   Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
+   Nmap scan report for 192.168.255.1
+   Host is up.
+
+   PORT     STATE    SERVICE
+   8881/tcp filtered galaxy4d
+
+   Nmap done: 1 IP address (1 host up) scanned in 14.02 seconds
+   Starting Nmap 7.80 ( https://nmap.org ) at 2024-07-20 13:04 UTC
+   Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
+   Nmap scan report for 192.168.255.1
+   Host is up.
+
+   PORT     STATE    SERVICE
+   7777/tcp filtered cbt
+
+   Nmap done: 1 IP address (1 host up) scanned in 14.02 seconds
+   Starting Nmap 7.80 ( https://nmap.org ) at 2024-07-20 13:04 UTC
+   Warning: 192.168.255.1 giving up on port because retransmission cap hit (0).
+   Nmap scan report for 192.168.255.1
+   Host is up.
+
+   PORT     STATE    SERVICE
+   9991/tcp filtered issa
+
+   Nmap done: 1 IP address (1 host up) scanned in 14.02 seconds
+   
+   vagrant@centralRouter:~$ ssh vagrant@192.168.255.1
+   The authenticity of host '192.168.255.1 (192.168.255.1)' can't be established.
+   ED25519 key fingerprint is SHA256:dEof/6Fm9Iy3IvzJwcYS1k0EAtuEJAVNkVA7dZbaPBU.
+   This key is not known by any other names
+   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+   Warning: Permanently added '192.168.255.1' (ED25519) to the list of known hosts.
+   vagrant@192.168.255.1's password: 
+   Welcome to Ubuntu 22.04.4 LTS (GNU/Linux 5.15.0-97-generic x86_64)
+   ...
+   Last login: Sat Jul 20 12:28:39 2024 from 192.168.56.1
+   vagrant@inetRouter:~$
    ```
    
    
